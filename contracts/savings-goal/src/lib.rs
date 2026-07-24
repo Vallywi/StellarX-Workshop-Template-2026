@@ -1,24 +1,20 @@
 #![no_std]
-//! Savings Goal — a tiny Soroban contract for the StellarX PUP workshop.
+//! Bayanihan Fund — a tiny Soroban contract for the StellarX PUP workshop.
 //!
-//! It tracks a savings *target* and the running *saved* total. It is deliberately
-//! simple (plain integer state, no token transfers) so it always works in a live
-//! demo. See the README for how to extend it to move real XLM/USDC.
+//! It tracks a fundraising *target* and the running *raised* total.
 
 use soroban_sdk::{contract, contracterror, contractimpl, contracttype, Env};
 
-/// Snapshot of the goal, returned to the frontend.
 #[contracttype]
 #[derive(Clone)]
 pub struct State {
-    pub saved: i128,
+    pub raised: i128,
     pub target: i128,
 }
 
-/// Keys for the contract's instance storage.
 #[contracttype]
 pub enum DataKey {
-    Saved,
+    Raised,
     Target,
 }
 
@@ -32,11 +28,10 @@ pub enum Error {
 }
 
 #[contract]
-pub struct SavingsGoalContract;
+pub struct BayanihanFundContract;
 
 #[contractimpl]
-impl SavingsGoalContract {
-    /// Set the savings target. Can only be called once.
+impl BayanihanFundContract {
     pub fn init(env: Env, target: i128) -> Result<(), Error> {
         if env.storage().instance().has(&DataKey::Target) {
             return Err(Error::AlreadyInitialized);
@@ -45,12 +40,11 @@ impl SavingsGoalContract {
             return Err(Error::InvalidAmount);
         }
         env.storage().instance().set(&DataKey::Target, &target);
-        env.storage().instance().set(&DataKey::Saved, &0i128);
+        env.storage().instance().set(&DataKey::Raised, &0i128);
         env.storage().instance().extend_ttl(1000, 5000);
         Ok(())
     }
 
-    /// Add `amount` to the saved total. Returns the new saved total.
     pub fn contribute(env: Env, amount: i128) -> Result<i128, Error> {
         if !env.storage().instance().has(&DataKey::Target) {
             return Err(Error::NotInitialized);
@@ -58,17 +52,16 @@ impl SavingsGoalContract {
         if amount <= 0 {
             return Err(Error::InvalidAmount);
         }
-        let saved: i128 = env.storage().instance().get(&DataKey::Saved).unwrap_or(0);
-        let new_saved = saved + amount;
-        env.storage().instance().set(&DataKey::Saved, &new_saved);
+        let raised: i128 = env.storage().instance().get(&DataKey::Raised).unwrap_or(0);
+        let new_raised = raised + amount;
+        env.storage().instance().set(&DataKey::Raised, &new_raised);
         env.storage().instance().extend_ttl(1000, 5000);
-        Ok(new_saved)
+        Ok(new_raised)
     }
 
-    /// Read the current saved + target. Returns zeros if not initialised yet.
     pub fn get_state(env: Env) -> State {
         State {
-            saved: env.storage().instance().get(&DataKey::Saved).unwrap_or(0),
+            raised: env.storage().instance().get(&DataKey::Raised).unwrap_or(0),
             target: env.storage().instance().get(&DataKey::Target).unwrap_or(0),
         }
     }

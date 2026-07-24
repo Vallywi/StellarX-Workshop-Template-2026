@@ -2,9 +2,9 @@
 use super::*;
 use soroban_sdk::Env;
 
-fn setup(env: &Env) -> SavingsGoalContractClient {
-    let contract_id = env.register(SavingsGoalContract, ());
-    SavingsGoalContractClient::new(env, &contract_id)
+fn setup(env: &Env) -> BayanihanFundContractClient {
+    let contract_id = env.register(BayanihanFundContract, ());
+    BayanihanFundContractClient::new(env, &contract_id)
 }
 
 #[test]
@@ -15,13 +15,13 @@ fn init_then_contribute_tracks_total() {
     client.init(&1000);
     let state = client.get_state();
     assert_eq!(state.target, 1000);
-    assert_eq!(state.saved, 0);
+    assert_eq!(state.raised, 0);
 
     assert_eq!(client.contribute(&250), 250);
     assert_eq!(client.contribute(&750), 1000);
 
     let state = client.get_state();
-    assert_eq!(state.saved, 1000);
+    assert_eq!(state.raised, 1000);
     assert_eq!(state.target, 1000);
 }
 
@@ -30,7 +30,7 @@ fn get_state_before_init_is_zero() {
     let env = Env::default();
     let client = setup(&env);
     let state = client.get_state();
-    assert_eq!(state.saved, 0);
+    assert_eq!(state.raised, 0);
     assert_eq!(state.target, 0);
 }
 

@@ -1,41 +1,17 @@
-# Your Project
+# Bayanihan Community Fund (Medical Expense Crowdfund)
 
-Fill this in as you build. It doubles as your **submission README**, and it maps
-directly to how projects are judged (meaningful Stellar use, real problem,
-working demo).
+**The Problem:** Surprise medical bills devastate families, and traditional crowdfunding platforms take a 5-10% cut of donations.
+**The User:** A community member (donor) who wants to contribute directly to a neighbor's medical emergency.
+**The Core Action:** The user donates funds (USDC/XLM) directly to the beneficiary's wallet and updates the on-chain "raised" milestone tracker.
+**The Data:** The smart contract tracks the `target` (the total amount needed) and `raised` (the total amount contributed so far).
 
-## Idea
-- **Track:** Remittance / Financial Inclusion / DeFi & RWA / AI / Social Impact / Open
-- **Idea # (from the 300-ideas list, if any):**
-- **One-liner:**
+## Screens
+A single MVP screen that displays:
+1. The Bayanihan Fund progress bar (Current Raised / Target).
+2. A "Donate" panel where the user enters an amount.
+3. A confirmation once the payment and contract update succeed.
 
-## Problem
-Who has this problem, and why does it matter? (A clear Philippines remittance /
-payments / financial-inclusion angle scores well.)
-
-## How it uses Stellar
-Which Stellar pieces are **core** (not cosmetic)? e.g. payments, trustlines,
-path payments, claimable balances, a Soroban contract, anchors (SEP-24/31),
-Soroswap/Blend/Reflector. Stellar must be central to the product.
-
-## What works in the demo
-- [ ] Connect wallet (Freighter, testnet)
-- [ ] Core flow runs end-to-end on testnet
-- [ ] _(your headline feature here)_
-
-## Setup / run
-How a judge runs it locally:
-- Network: **testnet**
-- `cd web && npm install && npm run dev`
-- Contract (if used): `.\scripts\deploy.ps1`, then set `NEXT_PUBLIC_CONTRACT_ID`
-- Any other env vars / steps:
-
-## Demo
-- 2–4 min video link (show the core flow working on testnet):
-- Public repo link:
-
-## Submission checklist
-- [ ] Public GitHub repo with a license (this scaffold ships MIT — update `LICENSE`)
-- [ ] README explains problem, Stellar usage, and setup
-- [ ] Demo video (2–4 min)
-- [ ] Submitted via the workshop's official GitHub issue template
+## Acceptance Checks
+- [ ] **Check 1:** The page displays the correct target and current raised amount fetched from the Soroban contract.
+- [ ] **Check 2:** A donor can submit a donation (Stellar payment) that successfully confirms on the testnet.
+- [ ] **Check 3:** The Soroban contract's "raised" total increases by the exact donated amount.

@@ -14,8 +14,8 @@ import { server, NETWORK_PASSPHRASE, CONTRACT_ID } from './stellar';
 // account works — we reuse the Circle USDC issuer.
 const READ_SOURCE = 'GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5';
 
-export interface SavingsState {
-  saved: number;
+export interface FundState {
+  raised: number;
   target: number;
 }
 
@@ -24,7 +24,7 @@ export function contractConfigured(): boolean {
 }
 
 /** Read get_state() via simulation — no wallet or signature required. */
-export async function readSavingsState(): Promise<SavingsState> {
+export async function readFundState(): Promise<FundState> {
   const contract = new Contract(CONTRACT_ID);
   const source = new Account(READ_SOURCE, '0');
 
@@ -42,10 +42,10 @@ export async function readSavingsState(): Promise<SavingsState> {
   }
 
   const state = scValToNative(sim.result.retval) as {
-    saved: bigint;
+    raised: bigint;
     target: bigint;
   };
-  return { saved: Number(state.saved), target: Number(state.target) };
+  return { raised: Number(state.raised), target: Number(state.target) };
 }
 
 /**
